@@ -1,0 +1,16 @@
+{
+    "projectName": "Statelang",
+    "languages": [
+        {
+            "id": "statelang",
+            "grammar": "src/statelang.langium",
+            "fileExtensions": [
+                "sdl"
+            ],
+            "textMate": {
+                "out": "syntaxes/statelang.tmLanguage.json"
+            }
+        }
+    ],
+    "out": "src/generated"
+}

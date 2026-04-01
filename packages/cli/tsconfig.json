@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "out",
+    "declarationDir": "out",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+
+    "module": "Node16",
+    "target": "ES2022",
+    "moduleResolution": "node16",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "importsNotUsedAsValues": "remove",
+
+    "paths": {
+      "statelang-language": ["../language/out"],
+      "statelang-language/*": ["../language/out/*"]
+    }
+  },
+  "references": [
+    {
+      "path": "../language/tsconfig.src.json"
+    }
+  ],
+  "include": ["src/**/*.ts"]
+}
+
+
