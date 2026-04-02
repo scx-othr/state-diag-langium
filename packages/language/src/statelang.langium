@@ -11,6 +11,7 @@ interface FloatExpression extends Expression { value: number }
 interface BoolExpression extends Expression { value: boolean }
 interface StringExpression extends Expression { value: string }
 interface ReferenceExpression extends Expression { value: string }
+
 Expression returns Expression:
     OrExpression
 ;
@@ -88,12 +89,7 @@ Action:
     '/'
     ('spec' description=STRING)?
     ('impl' target=ID content=IMPL_BODY)?
-<<<<<<< HEAD
-    //(guard=Guard)?
 ;
-=======
-    (guard=Guard)?;
->>>>>>> 62d7a397e140325a34c2803b7a31cd668507e941
 
 Guard:
     '[' condition=Expression ']';
