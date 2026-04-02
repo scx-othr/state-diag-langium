@@ -64,7 +64,6 @@ State:
     (final?='final')? 'state' name=ID
     ('entry' entryAction=Action)?
     ('exit' exitAction=Action)?
-//    ';'
 ;
 
 InitialState:
@@ -77,9 +76,7 @@ Transition:
     ('on' event=Event)
     (action=Action)?
     (guard=Guard)?
-    //';'
 ;
-
 
 Event:
     name=ID ('(' params+=Parameter (',' params+=Parameter)* ')')?;
@@ -88,12 +85,15 @@ Parameter:
     type=ID name=ID;
 
 Action:
-    //name=ID
     '/'
     ('spec' description=STRING)?
     ('impl' target=ID content=IMPL_BODY)?
+<<<<<<< HEAD
     //(guard=Guard)?
 ;
+=======
+    (guard=Guard)?;
+>>>>>>> 62d7a397e140325a34c2803b7a31cd668507e941
 
 Guard:
     '[' condition=Expression ']';

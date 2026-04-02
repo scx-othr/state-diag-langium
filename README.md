@@ -22,9 +22,7 @@ Open the parent folder of this file in VSCode. Execute the following commands on
 In the second VSCode instance, you may now open the file [GumballMachine.sdl](runtime/GumballMachine.sdl).  and modify it, while being assisted by syntax highlighting and code completion.
 
 ## Step 2: Generator
-From the second instance, open the VSCode terminal and execute the following commands to generate code:
-- `cd ../packages/cli/`
-- `node ./out/main.js generate ../../runtime/GumballMachine.sdl ../../runtime/src/gen`
+Right-click on the file file [GumballMachine.sdl](runtime/GumballMachine.sdl) in the VSCode runtime instance, and execute the action \emph{Generate Java code}. The intermediate generation result is stored in [src/gen](runtime/src/gen).
 
 ## Step 3: MDELLMProcessor
 - Configure the MDELLMProcessor via the VSCode settings menu (`Ctrl+,`, search for "AI Server Settings"). See README.md of the modellmprocessor repository.
