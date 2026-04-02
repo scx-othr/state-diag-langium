@@ -16,6 +16,7 @@ export const StatelangTerminals = {
     BOOLEAN: /true|false/,
     ML_COMMENT: /\/\*[\s\S]*?\*\//,
     SL_COMMENT: /\/\/[^\n\r]*/,
+    IMPL_BODY: /<<[\s\S]*?>>/,
 };
 
 export type StatelangTerminalNames = keyof typeof StatelangTerminals;
@@ -31,7 +32,6 @@ export type StatelangKeywordNames =
     | ","
     | "-"
     | "/"
-    | ";"
     | "<"
     | "<="
     | "="
@@ -40,12 +40,13 @@ export type StatelangKeywordNames =
     | ">="
     | "["
     | "]"
-    | "desc"
     | "entry"
     | "exit"
+    | "final"
     | "impl"
     | "initial"
     | "on"
+    | "spec"
     | "state"
     | "statemachine"
     | "var"
@@ -58,18 +59,18 @@ export type StatelangTokenNames = StatelangTerminalNames | StatelangKeywordNames
 export interface Action extends langium.AstNode {
     readonly $container: InitialState | State | Transition;
     readonly $type: 'Action';
-    description?: Description;
+    content?: string;
+    description?: string;
     guard?: Guard;
-    implementation?: Implementation;
-    name: string;
+    target?: string;
 }
 
 export const Action = {
     $type: 'Action',
+    content: 'content',
     description: 'description',
     guard: 'guard',
-    implementation: 'implementation',
-    name: 'name'
+    target: 'target'
 } as const;
 
 export function isAction(item: unknown): item is Action {
@@ -106,21 +107,6 @@ export const BoolExpression = {
 
 export function isBoolExpression(item: unknown): item is BoolExpression {
     return reflection.isInstance(item, BoolExpression.$type);
-}
-
-export interface Description extends langium.AstNode {
-    readonly $container: Action | Transition;
-    readonly $type: 'Description';
-    text: string;
-}
-
-export const Description = {
-    $type: 'Description',
-    text: 'text'
-} as const;
-
-export function isDescription(item: unknown): item is Description {
-    return reflection.isInstance(item, Description.$type);
 }
 
 export interface Event extends langium.AstNode {
@@ -179,21 +165,6 @@ export const Guard = {
 
 export function isGuard(item: unknown): item is Guard {
     return reflection.isInstance(item, Guard.$type);
-}
-
-export interface Implementation extends langium.AstNode {
-    readonly $container: Action;
-    readonly $type: 'Implementation';
-    text: string;
-}
-
-export const Implementation = {
-    $type: 'Implementation',
-    text: 'text'
-} as const;
-
-export function isImplementation(item: unknown): item is Implementation {
-    return reflection.isInstance(item, Implementation.$type);
 }
 
 export interface InitialState extends langium.AstNode {
@@ -277,6 +248,7 @@ export interface State extends langium.AstNode {
     readonly $type: 'State';
     entryAction?: Action;
     exitAction?: Action;
+    final: boolean;
     name: string;
 }
 
@@ -284,6 +256,7 @@ export const State = {
     $type: 'State',
     entryAction: 'entryAction',
     exitAction: 'exitAction',
+    final: 'final',
     name: 'name'
 } as const;
 
@@ -332,8 +305,7 @@ export interface Transition extends langium.AstNode {
     readonly $container: Statemachine;
     readonly $type: 'Transition';
     action?: Action;
-    description?: Description;
-    event?: Event;
+    event: Event;
     guard?: Guard;
     source: langium.Reference<State>;
     target: langium.Reference<State>;
@@ -342,7 +314,6 @@ export interface Transition extends langium.AstNode {
 export const Transition = {
     $type: 'Transition',
     action: 'action',
-    description: 'description',
     event: 'event',
     guard: 'guard',
     source: 'source',
@@ -376,12 +347,10 @@ export type StatelangAstType = {
     Action: Action
     BinaryExpression: BinaryExpression
     BoolExpression: BoolExpression
-    Description: Description
     Event: Event
     Expression: Expression
     FloatExpression: FloatExpression
     Guard: Guard
-    Implementation: Implementation
     InitialState: InitialState
     IntExpression: IntExpression
     Model: Model
@@ -399,17 +368,17 @@ export class StatelangAstReflection extends langium.AbstractAstReflection {
         Action: {
             name: Action.$type,
             properties: {
+                content: {
+                    name: Action.content
+                },
                 description: {
                     name: Action.description
                 },
                 guard: {
                     name: Action.guard
                 },
-                implementation: {
-                    name: Action.implementation
-                },
-                name: {
-                    name: Action.name
+                target: {
+                    name: Action.target
                 }
             },
             superTypes: []
@@ -438,15 +407,6 @@ export class StatelangAstReflection extends langium.AbstractAstReflection {
                 }
             },
             superTypes: [Expression.$type]
-        },
-        Description: {
-            name: Description.$type,
-            properties: {
-                text: {
-                    name: Description.text
-                }
-            },
-            superTypes: []
         },
         Event: {
             name: Event.$type,
@@ -481,15 +441,6 @@ export class StatelangAstReflection extends langium.AbstractAstReflection {
             properties: {
                 condition: {
                     name: Guard.condition
-                }
-            },
-            superTypes: []
-        },
-        Implementation: {
-            name: Implementation.$type,
-            properties: {
-                text: {
-                    name: Implementation.text
                 }
             },
             superTypes: []
@@ -556,6 +507,10 @@ export class StatelangAstReflection extends langium.AbstractAstReflection {
                 exitAction: {
                     name: State.exitAction
                 },
+                final: {
+                    name: State.final,
+                    defaultValue: false
+                },
                 name: {
                     name: State.name
                 }
@@ -600,9 +555,6 @@ export class StatelangAstReflection extends langium.AbstractAstReflection {
             properties: {
                 action: {
                     name: Transition.action
-                },
-                description: {
-                    name: Transition.description
                 },
                 event: {
                     name: Transition.event

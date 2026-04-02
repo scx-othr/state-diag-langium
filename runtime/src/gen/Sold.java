@@ -7,15 +7,15 @@ public class Sold extends State {
     @Override
     public void dispense() {
         if ((context.getBalls() > 1)) {
-        context.decrementBalls();
-         System.out.println("dispensing ball");
+         context.decrementBalls();
+                System.out.println("dispensing ball");
             this.onExit();
             context.setState(new NoQuarter(context));
             context.getState().onEntry();
         }
         else if ((context.getBalls() == 1)) {
-        context.decrementBalls();
-         System.out.println("machine is empty!");
+         context.decrementBalls(); 
+                System.out.println("machine is empty!");
             this.onExit();
             context.setState(new SoldOut(context));
             context.getState().onEntry();
@@ -25,7 +25,7 @@ public class Sold extends State {
     public void abandon() {
         if (true) {
             this.onExit();
-            context.setState(new Final(context));
+            context.setState(new TheEnd(context));
             context.getState().onEntry();
         }
 }

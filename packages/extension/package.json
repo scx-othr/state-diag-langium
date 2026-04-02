@@ -22,7 +22,20 @@
             "language": "statelang",
             "scopeName": "source.statelang",
             "path": "syntaxes/statelang.tmLanguage.json"
-        }]
+        }],
+        "commands": [{
+            "command": "statelang.showPlantUML",
+            "title": "Show PlantUML Preview",
+            "icon": "$(preview)",
+            "category": "StateLang"
+        }],
+        "menus": {
+            "editor/title": [{
+                "command": "statelang.showPlantUML",
+                "when": "resourceLangId == statelang",
+                "group": "navigation"
+            }]
+        }
     },
     "activationEvents": [
         "onLanguage:statelang"

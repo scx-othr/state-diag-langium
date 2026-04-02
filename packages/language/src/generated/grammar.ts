@@ -464,7 +464,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@23"
+                    "$ref": "#/rules@21"
                   },
                   "arguments": []
                 }
@@ -487,7 +487,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@26"
+                    "$ref": "#/rules@23"
                   },
                   "arguments": []
                 }
@@ -510,7 +510,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@29"
+                    "$ref": "#/rules@24"
                   },
                   "arguments": []
                 }
@@ -533,7 +533,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@24"
+                    "$ref": "#/rules@22"
                   },
                   "arguments": []
                 }
@@ -556,7 +556,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@22"
+                    "$ref": "#/rules@20"
                   },
                   "arguments": []
                 }
@@ -606,7 +606,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -618,7 +618,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -644,10 +644,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
               }
             ],
             "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": ";"
           }
         ]
       },
@@ -672,7 +668,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -750,6 +746,16 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
         "$type": "Group",
         "elements": [
           {
+            "$type": "Assignment",
+            "feature": "final",
+            "operator": "?=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "final"
+            },
+            "cardinality": "?"
+          },
+          {
             "$type": "Keyword",
             "value": "state"
           },
@@ -760,7 +766,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -808,10 +814,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
               }
             ],
             "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": ";"
           }
         ]
       },
@@ -863,10 +865,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
               }
             ],
             "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": ";"
           }
         ]
       },
@@ -896,7 +894,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@20"
+              "$ref": "#/rules@18"
             },
             "arguments": []
           },
@@ -932,39 +930,16 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
                   "arguments": []
                 }
               }
-            ],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Keyword",
-                "value": "/"
-              },
-              {
-                "$type": "Assignment",
-                "feature": "action",
-                "operator": "=",
-                "terminal": {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$ref": "#/rules@16"
-                  },
-                  "arguments": []
-                }
-              }
-            ],
-            "cardinality": "?"
+            ]
           },
           {
             "$type": "Assignment",
-            "feature": "description",
+            "feature": "action",
             "operator": "=",
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@18"
+                "$ref": "#/rules@16"
               },
               "arguments": []
             },
@@ -982,10 +957,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
               "arguments": []
             },
             "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": ";"
           }
         ]
       },
@@ -1006,7 +977,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -1078,7 +1049,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -1090,7 +1061,7 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@20"
               },
               "arguments": []
             }
@@ -1108,41 +1079,63 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
         "$type": "Group",
         "elements": [
           {
-            "$type": "Assignment",
-            "feature": "name",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@22"
-              },
-              "arguments": []
-            }
+            "$type": "Keyword",
+            "value": "/"
           },
           {
-            "$type": "Assignment",
-            "feature": "description",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@18"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "spec"
               },
-              "arguments": []
-            },
+              {
+                "$type": "Assignment",
+                "feature": "description",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@22"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
             "cardinality": "?"
           },
           {
-            "$type": "Assignment",
-            "feature": "implementation",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@19"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": "impl"
               },
-              "arguments": []
-            },
+              {
+                "$type": "Assignment",
+                "feature": "target",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@20"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Assignment",
+                "feature": "content",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@27"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
             "cardinality": "?"
           },
           {
@@ -1189,62 +1182,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
           {
             "$type": "Keyword",
             "value": "]"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Description",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "desc"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "text",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@24"
-              },
-              "arguments": []
-            }
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Implementation",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Keyword",
-            "value": "impl"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "text",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@24"
-              },
-              "arguments": []
-            }
           }
         ]
       },
@@ -1316,21 +1253,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
     },
     {
       "$type": "TerminalRule",
-      "name": "LONG",
-      "type": {
-        "$type": "ReturnType",
-        "name": "number"
-      },
-      "definition": {
-        "$type": "RegexToken",
-        "regex": "/[0-9]+[lL]/",
-        "parenthesized": false
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
       "name": "FLOAT",
       "type": {
         "$type": "ReturnType",
@@ -1339,28 +1261,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
       "definition": {
         "$type": "RegexToken",
         "regex": "/[0-9]+\\\\.[0-9]+([fF])?/",
-        "parenthesized": false
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "CHAR",
-      "definition": {
-        "$type": "RegexToken",
-        "regex": "/'(\\\\\\\\.|[^'\\\\\\\\])'/",
-        "parenthesized": false
-      },
-      "fragment": false,
-      "hidden": false
-    },
-    {
-      "$type": "TerminalRule",
-      "name": "CONTEXT",
-      "definition": {
-        "$type": "RegexToken",
-        "regex": "/context/",
         "parenthesized": false
       },
       "fragment": false,
@@ -1402,6 +1302,17 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
         "parenthesized": false
       },
       "fragment": false
+    },
+    {
+      "$type": "TerminalRule",
+      "name": "IMPL_BODY",
+      "definition": {
+        "$type": "RegexToken",
+        "regex": "/<<[\\\\s\\\\S]*?>>/",
+        "parenthesized": false
+      },
+      "fragment": false,
+      "hidden": false
     }
   ],
   "interfaces": [

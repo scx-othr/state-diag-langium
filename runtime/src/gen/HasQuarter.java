@@ -7,7 +7,7 @@ public class HasQuarter extends State {
     @Override
     public void eject() {
         if (true) {
-        System.out.println("Returning coin...");
+         System.out.println("Returning coin..."); 
             this.onExit();
             context.setState(new NoQuarter(context));
             context.getState().onEntry();
@@ -16,7 +16,7 @@ public class HasQuarter extends State {
     @Override
     public void turnCrank() {
         if (true) {
-        System.out.println("Turning crank...");
+         System.out.println("Turning crank...");
             this.onExit();
             context.setState(new Sold(context));
             context.getState().onEntry();
@@ -26,7 +26,7 @@ public class HasQuarter extends State {
     public void abandon() {
         if (true) {
             this.onExit();
-            context.setState(new Final(context));
+            context.setState(new TheEnd(context));
             context.getState().onEntry();
         }
 }

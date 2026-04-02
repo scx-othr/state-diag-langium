@@ -6,7 +6,7 @@ public class NoQuarter extends State {
 
     @Override
     public void onEntry() {
-        System.out.println("Plesase insert coin...");
+         System.out.println("Plesase insert coin..."); 
     }
 
     /** @prompt Print a message indicating that the machine is ready and the money was accepted */
@@ -14,8 +14,7 @@ public class NoQuarter extends State {
     public void insertQuarter() {
         if (true) {
          // generated start
-System.out.println("Money has been accepted. Machine is ready.");
-// generated end
+        // generated end
             this.onExit();
             context.setState(new HasQuarter(context));
             context.getState().onEntry();
@@ -25,7 +24,7 @@ System.out.println("Money has been accepted. Machine is ready.");
     public void abandon() {
         if (true) {
             this.onExit();
-            context.setState(new Final(context));
+            context.setState(new TheEnd(context));
             context.getState().onEntry();
         }
 }

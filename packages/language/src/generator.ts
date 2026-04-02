@@ -75,9 +75,6 @@ function createGenerationContext(stm: Statemachine): GenerationContext {
                 ctx.actions.set(eventName, t.action);
             }
         }
-        if (t.action && !ctx.actions.has(t.action.name)) {
-            ctx.actions.set(t.action.name, t.action);
-        }
     }
  for(var i = 0; i < stm.states.length; i++){
         const state = stm.states[i];       
@@ -267,7 +264,7 @@ function buildConcreteState(ctx: GenerationContext, state: any): string {
         let mCode = "";
         if (action) {
             if (action.description) {
-                const desc = action.description.text.replace(/^["']|["']$/g, '');
+                const desc = action.description.replace(/^["']|["']$/g, '');
                 mCode += `    /** @prompt ${desc} */\n`;
             }
             mCode += `    @Override\n`;
@@ -286,7 +283,7 @@ function buildConcreteState(ctx: GenerationContext, state: any): string {
 
         const actionWithDesc = transitions.find(t => t.action?.description)?.action;
         if (actionWithDesc?.description) {
-            const desc = actionWithDesc.description.text.replace(/^["']|["']$/g, '');
+            const desc = actionWithDesc.description.replace(/^["']|["']$/g, '');
             code += `    /** @prompt ${desc} */\n`;
         }
 
@@ -407,8 +404,8 @@ function generateBody(action?: Action): string {
 `;
     }
  
-    if (action.implementation) {
-        const code = action.implementation.text.replace(/^["']|["']$/g, '');
+    if (action.content) {
+        const code = action.content?.replace('<<', '').replace('>>', '');
         if (code.length > 0) {
             result += code
                 .split('\n')
@@ -424,10 +421,10 @@ function generateBody(action?: Action): string {
 
 
 export function getActionCode(action?: Action): string {
-    if (!action?.implementation){
+    if (!action?.content){
         return '';
     } else{
-        return action.implementation.text.replace(/^["']|["']$/g, '');
+        return action.content.replace('<<', '').replace('>>', '');
     }
 }
 

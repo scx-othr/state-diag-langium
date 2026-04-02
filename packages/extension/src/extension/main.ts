@@ -1,13 +1,170 @@
 import type { LanguageClientOptions, ServerOptions } from 'vscode-languageclient/node.js';
-import type * as vscode from 'vscode';
+import * as vscode from 'vscode';
 import * as path from 'node:path';
+import * as fs from 'node:fs';
+import * as zlib from 'node:zlib';
+import * as https from 'node:https';
 import { LanguageClient, TransportKind } from 'vscode-languageclient/node.js';
+import { URI } from 'langium';
+import { NodeFileSystem } from 'langium/node';
+import { createStatelangServices, generatePlantUML } from 'statelang-language';
+import type { Model } from 'statelang-language';
 
 let client: LanguageClient;
+let plantUmlPanel: vscode.WebviewPanel | undefined;
+
+// ── PlantUML encoding (deflate + custom base64, no external dep) ─────────────
+
+const PUML_ALPHABET =
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_';
+
+function encode6(b: number): string {
+    return PUML_ALPHABET[b & 0x3f];
+}
+
+function encode3bytes(b1: number, b2: number, b3: number): string {
+    return (
+        encode6(b1 >> 2) +
+        encode6(((b1 & 0x3) << 4) | (b2 >> 4)) +
+        encode6(((b2 & 0xf) << 2) | (b3 >> 6)) +
+        encode6(b3)
+    );
+}
+
+function encodePlantUML(puml: string): string {
+    const compressed = zlib.deflateRawSync(Buffer.from(puml, 'utf8'), { level: 9 });
+    let result = '';
+    for (let i = 0; i < compressed.length; i += 3) {
+        result += encode3bytes(
+            compressed[i],
+            compressed[i + 1] ?? 0,
+            compressed[i + 2] ?? 0
+        );
+    }
+    return result;
+}
+
+// ── Fetch SVG from PlantUML server ───────────────────────────────────────────
+
+function fetchSVG(encoded: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const url = `https://www.plantuml.com/plantuml/svg/${encoded}`;
+        https.get(url, (res) => {
+            if (res.statusCode !== 200) {
+                reject(new Error(`PlantUML server returned HTTP ${res.statusCode}`));
+                res.resume();
+                return;
+            }
+            let data = '';
+            res.setEncoding('utf8');
+            res.on('data', (chunk) => { data += chunk; });
+            res.on('end', () => resolve(data));
+        }).on('error', reject);
+    });
+}
+
+// ── Webview panel ─────────────────────────────────────────────────────────────
+
+function showPlantUMLPanel(svg: string, title: string): void {
+    if (plantUmlPanel) {
+        plantUmlPanel.title = `PlantUML: ${title}`;
+        plantUmlPanel.reveal(vscode.ViewColumn.Beside, true);
+    } else {
+        plantUmlPanel = vscode.window.createWebviewPanel(
+            'statelangPlantUML',
+            `PlantUML: ${title}`,
+            { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
+            { enableScripts: false, retainContextWhenHidden: true }
+        );
+        plantUmlPanel.onDidDispose(() => { plantUmlPanel = undefined; });
+    }
+    plantUmlPanel.webview.html = buildWebviewHtml(svg);
+}
+
+function buildWebviewHtml(svg: string): string {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'unsafe-inline';">
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; }
+    .container { display: flex; justify-content: center; align-items: flex-start;
+                 padding: 16px; box-sizing: border-box; }
+    svg { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <div class="container">${svg}</div>
+</body>
+</html>`;
+}
+
+// ── Parse helper ──────────────────────────────────────────────────────────────
+
+async function parseSDL(filePath: string): Promise<Model> {
+    const services = createStatelangServices({ ...NodeFileSystem }).Statelang;
+    const langDoc = await services.shared.workspace.LangiumDocuments
+        .getOrCreateDocument(URI.file(path.resolve(filePath)));
+    await services.shared.workspace.DocumentBuilder.build([langDoc], {});
+    return langDoc.parseResult.value as Model;
+}
+
+// ── Extension lifecycle ───────────────────────────────────────────────────────
 
 // This function is called when the extension is activated.
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     client = await startLanguageClient(context);
+
+    // Command: Show PlantUML Preview (triggered by editor title button)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('statelang.showPlantUML', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor || editor.document.languageId !== 'statelang') {
+                vscode.window.showWarningMessage('Open a .sdl file to show its PlantUML preview.');
+                return;
+            }
+            try {
+                const filePath = editor.document.uri.fsPath;
+                const model = await parseSDL(filePath);
+                const puml = generatePlantUML(model);
+                const encoded = encodePlantUML(puml);
+                const svg = await fetchSVG(encoded);
+                showPlantUMLPanel(svg, path.basename(filePath));
+            } catch (err) {
+                vscode.window.showErrorMessage(`PlantUML preview failed: ${err}`);
+            }
+        })
+    );
+
+    // Auto-generate .puml file on save; also refresh open webview panel
+    context.subscriptions.push(
+        vscode.workspace.onDidSaveTextDocument(async (doc) => {
+            if (doc.languageId !== 'statelang') return;
+            try {
+                const filePath = doc.uri.fsPath;
+                const model = await parseSDL(filePath);
+                const pumlContent = generatePlantUML(model);
+
+                // Write .puml file
+                const outDir = path.join(path.dirname(filePath), 'generator');
+                fs.mkdirSync(outDir, { recursive: true });
+                const baseName = path.basename(filePath, path.extname(filePath));
+                const outFile = path.join(outDir, `${baseName}.puml`);
+                fs.writeFileSync(outFile, pumlContent, 'utf8');
+
+                // Refresh webview if open
+                if (plantUmlPanel) {
+                    const encoded = encodePlantUML(pumlContent);
+                    const svg = await fetchSVG(encoded);
+                    showPlantUMLPanel(svg, path.basename(filePath));
+                }
+            } catch (err) {
+                vscode.window.showErrorMessage(`PlantUML generation failed: ${err}`);
+            }
+        })
+    );
 }
 
 // This function is called when the extension is deactivated.

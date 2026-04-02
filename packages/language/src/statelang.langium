@@ -48,7 +48,9 @@ Primary returns Expression:
     | '(' Expression ')'
 ;
 VariableDeclaration:
-    'var' type=ID name=ID ('=' value=Expression)? ';';
+    'var' type=ID name=ID ('=' value=Expression)? 
+    //';'
+;
 
 Statemachine:
     'statemachine' name=ID '{'
@@ -59,22 +61,24 @@ Statemachine:
     '}';
 
 State:
-    'state' name=ID
+    (final?='final')? 'state' name=ID
     ('entry' entryAction=Action)?
     ('exit' exitAction=Action)?
-    ';';
+//    ';'
+;
 
 InitialState:
-    'initial' target=[State] ('/' action=Action)? ';';
+    'initial' target=[State] ('/' action=Action)? //';'
+;
 
 Transition:
     source=[State] 
     ARROW target=[State] 
-    ('on' event=Event)?
-    ('/' action=Action)?
-    (description=Description)?
+    ('on' event=Event)
+    (action=Action)?
     (guard=Guard)?
-    ';';
+    //';'
+;
 
 
 Event:
@@ -84,32 +88,25 @@ Parameter:
     type=ID name=ID;
 
 Action:
-    name=ID
-    (description=Description)?
-    (implementation=Implementation)?
+    //name=ID
+    '/'
+    ('spec' description=STRING)?
+    ('impl' target=ID content=IMPL_BODY)?
     (guard=Guard)?
 ;
 
 Guard:
     '[' condition=Expression ']';
 
-Description:
-    'desc' text=STRING;
-
-Implementation:
-    'impl' text=STRING;
- 
-
 terminal ARROW: '->';
 hidden terminal WS: /\s+/;
 terminal ID: /[_a-zA-Z][\w_]*/;
 terminal INT returns number: /[0-9]+/;
 terminal STRING: /"(\\.|[^"\\])*"|'(\\.|[^'\\])*'/;
-terminal LONG returns number: /[0-9]+[lL]/;
 terminal FLOAT returns number: /[0-9]+\.[0-9]+([fF])?/;
-terminal CHAR: /'(\\.|[^'\\])'/;
-terminal CONTEXT: /context/;
 terminal BOOLEAN returns boolean: /true|false/;
 
 hidden terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
 hidden terminal SL_COMMENT: /\/\/[^\n\r]*/;
+
+terminal IMPL_BODY: /<<[\s\S]*?>>/;

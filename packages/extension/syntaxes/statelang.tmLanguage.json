@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.statelang",
-      "match": "\\b(desc|entry|exit|impl|initial|on|state|statemachine|var)\\b"
+      "match": "\\b(entry|exit|final|impl|initial|on|spec|state|statemachine|var)\\b"
     },
     {
       "name": "string.quoted.double.statelang",

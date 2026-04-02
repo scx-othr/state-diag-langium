@@ -1,39 +1,42 @@
 statemachine GumballMachine {
-    var int balls;
+    var int balls
 
-    initial NoQuarter;
+    initial NoQuarter
     state NoQuarter
-        entry insertMessage impl "System.out.println(\"Plesase insert coin...\");";
-    state HasQuarter;
-    state Sold;
+        entry / impl java << System.out.println("Plesase insert coin..."); >>
+    state HasQuarter
+    state Sold
     state SoldOut
-        entry soldOutMessage impl "System.out.println(\"Machine is sold out\");"
-        exit refillMessage desc "Print a message indicating that the machine is getting refilled now.";
-    state Final
-        entry shutdownMessage impl "System.out.println(\"System is shutting down ....\");\n context.setState(null);";
+        entry / impl java << System.out.println("Machine is sold out"); >>
+        exit / spec "Print a message indicating that the machine is getting refilled now."
+    final state TheEnd
+        entry / impl java << System.out.println("System is shutting down ....");
+        context.setState(null); >>
  
-    NoQuarter -> HasQuarter / insertQuarter
-        desc "Print a message indicating that the machine is ready and the money was accepted";
+    NoQuarter -> HasQuarter on insertQuarter /
+        spec "Print a message indicating that the machine is ready and the money was accepted"
 
-    HasQuarter -> NoQuarter on eject / eject
-        impl "System.out.println(\"Returning coin...\");";
+    HasQuarter -> NoQuarter on eject / 
+        impl java << System.out.println("Returning coin..."); >>
 
-    HasQuarter -> Sold / turnCrank
-        impl "System.out.println(\"Turning crank...\");";
+    HasQuarter -> Sold on turnCrank /
+        impl java << System.out.println("Turning crank...");>>
 
-    SoldOut -> NoQuarter on refill(int amount) / refill
-        desc "add the amount of the balls variable and print a message that the Machine has been refilled to $n Gumballs";
+    SoldOut -> NoQuarter on refill(int amount) / 
+        spec "add the amount of the balls variable and print a message that the Machine has been refilled to $n Gumballs"
 
-    Sold -> NoQuarter on dispense / dispense
-        impl "context.decrementBalls();\n System.out.println(\"dispensing ball\");"
-        [balls > 1];
+    Sold -> NoQuarter on dispense / 
+        impl java << context.decrementBalls();
+        System.out.println("dispensing ball");>>
+        [balls > 1]
 
-    Sold -> SoldOut on dispense / dispense
-        impl "context.decrementBalls();\n System.out.println(\"machine is empty!\");"
-        [balls == 1]; 
+    Sold -> SoldOut on dispense / 
+        impl java << context.decrementBalls(); 
+        System.out.println("machine is empty!");>>
+        [balls == 1]
 
-    NoQuarter -> Final on abandon;
-    HasQuarter -> Final on abandon;
-    Sold -> Final on abandon;
-    SoldOut -> Final on abandon;
+    NoQuarter -> TheEnd on abandon
+    HasQuarter -> TheEnd on abandon
+    Sold -> TheEnd on abandon
+    SoldOut -> TheEnd on abandon
 }
