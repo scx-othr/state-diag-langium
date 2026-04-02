@@ -74,7 +74,7 @@ function showPlantUMLPanel(svg: string, title: string): void {
             'statelangPlantUML',
             `PlantUML: ${title}`,
             { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
-            { enableScripts: false, retainContextWhenHidden: true }
+            { enableScripts: true, retainContextWhenHidden: true }
         );
         plantUmlPanel.onDidDispose(() => { plantUmlPanel = undefined; });
     }
@@ -87,16 +87,71 @@ function buildWebviewHtml(svg: string): string {
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy"
-        content="default-src 'none'; style-src 'unsafe-inline';">
+        content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
   <style>
-    html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; }
-    .container { display: flex; justify-content: center; align-items: flex-start;
-                 padding: 16px; box-sizing: border-box; }
-    svg { max-width: 100%; height: auto; }
+    html, body { margin: 0; padding: 0; height: 100%; background: #1e1e1e; color: #ccc;
+                 font-family: var(--vscode-font-family, sans-serif); overflow: hidden; }
+    #toolbar { display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+               background: #2d2d2d; border-bottom: 1px solid #444; user-select: none; }
+    #toolbar button { background: #3a3a3a; color: #ccc; border: 1px solid #555;
+                      border-radius: 3px; padding: 2px 10px; font-size: 14px;
+                      cursor: pointer; line-height: 1.4; }
+    #toolbar button:hover { background: #505050; }
+    #zoom-label { font-size: 12px; min-width: 42px; text-align: center; }
+    #canvas { overflow: auto; width: 100%; height: calc(100vh - 38px);
+              display: flex; justify-content: center; align-items: flex-start; }
+    #diagram { padding: 16px; transform-origin: top center;
+               display: inline-block; transition: transform 0.1s ease; }
+    #diagram svg { display: block; }
   </style>
 </head>
 <body>
-  <div class="container">${svg}</div>
+  <div id="toolbar">
+    <button id="btn-zoom-in"  title="Zoom in (Ctrl +)">+</button>
+    <button id="btn-zoom-out" title="Zoom out (Ctrl -)">&minus;</button>
+    <button id="btn-zoom-reset" title="Reset zoom (Ctrl 0)">&#8635;</button>
+    <span id="zoom-label">100%</span>
+  </div>
+  <div id="canvas">
+    <div id="diagram">${svg}</div>
+  </div>
+  <script>
+    (function() {
+      let scale = 1;
+      const MIN = 0.1, MAX = 5, STEP = 0.15;
+      const diagram = document.getElementById('diagram');
+      const label   = document.getElementById('zoom-label');
+
+      function applyZoom() {
+        diagram.style.transform = 'scale(' + scale.toFixed(3) + ')';
+        label.textContent = Math.round(scale * 100) + '%';
+      }
+
+      function zoomIn()    { scale = Math.min(MAX, scale + STEP); applyZoom(); }
+      function zoomOut()   { scale = Math.max(MIN, scale - STEP); applyZoom(); }
+      function zoomReset() { scale = 1; applyZoom(); }
+
+      document.getElementById('btn-zoom-in').addEventListener('click', zoomIn);
+      document.getElementById('btn-zoom-out').addEventListener('click', zoomOut);
+      document.getElementById('btn-zoom-reset').addEventListener('click', zoomReset);
+
+      // Ctrl+Wheel zoom
+      document.getElementById('canvas').addEventListener('wheel', function(e) {
+        if (!e.ctrlKey && !e.metaKey) return;
+        e.preventDefault();
+        if (e.deltaY < 0) zoomIn(); else zoomOut();
+      }, { passive: false });
+
+      // Keyboard shortcuts
+      window.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+          if (e.key === '+' || e.key === '=') { e.preventDefault(); zoomIn(); }
+          else if (e.key === '-')              { e.preventDefault(); zoomOut(); }
+          else if (e.key === '0')              { e.preventDefault(); zoomReset(); }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>`;
 }
