@@ -1,0 +1,28 @@
+@startuml
+title GumballMachine
+hide empty description
+
+state NoQuarter {
+  NoQuarter : entry /
+}
+state HasQuarter
+state Sold
+state SoldOut {
+  SoldOut : entry /
+  SoldOut : exit /
+}
+state TheEnd <<end>>
+
+[*] --> NoQuarter
+NoQuarter --> HasQuarter : insertQuarter
+HasQuarter --> NoQuarter : eject
+HasQuarter --> Sold : turnCrank
+SoldOut --> NoQuarter : refill(amount)
+Sold --> NoQuarter : dispense
+Sold --> SoldOut : dispense
+NoQuarter --> TheEnd : abandon
+HasQuarter --> TheEnd : abandon
+Sold --> TheEnd : abandon
+SoldOut --> TheEnd : abandon
+
+@enduml
