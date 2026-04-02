@@ -15,6 +15,7 @@ This repository contains a sample project (GumballMachine). To verify the correc
 ## Building and running this extension
 Open the parent folder of this file in VSCode. Execute the following commands on the terminal:
 - `npm install`
+- `npm run langium:generate`
 - `npm run build`
 - Press F5 to start a VSCode instance with this extension loaded. From this instance, open the [runtime](runtime) directory of this folder.
 
