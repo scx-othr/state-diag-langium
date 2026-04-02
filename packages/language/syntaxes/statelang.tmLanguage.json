@@ -78,18 +78,16 @@
     },
     "embedded-java": {
       "name": "meta.embedded.block.java.statelang",
-      "begin": "\\bimpl\\s+\\bjava\\b\\s*<<",
+      "begin": "\\b(impl)\\s+(java)\\b\\s*<<",
       "beginCaptures": {
-        "0": {
+        "1": {
+          "name": "keyword.control.statelang"
+        },
+        "2": {
           "name": "keyword.control.statelang"
         }
       },
       "end": ">>",
-      "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.tag.statelang"
-        }
-      },
       "contentName": "source.java",
       "patterns": [
         {

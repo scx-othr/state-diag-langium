@@ -21,10 +21,12 @@ if (!grammar.repository) grammar.repository = {};
 
 grammar.repository['embedded-java'] = {
     name: 'meta.embedded.block.java.statelang',
-    begin: '\\bimpl\\s+\\bjava\\b\\s*<<',
-    beginCaptures: { '0': { name: 'keyword.control.statelang' } },
+    begin: '\\b(impl)\\s+(java)\\b\\s*<<',
+    beginCaptures: {
+        '1': { name: 'keyword.control.statelang' },
+        '2': { name: 'keyword.control.statelang' }
+    },
     end: '>>',
-    endCaptures: { '0': { name: 'punctuation.definition.tag.statelang' } },
     contentName: 'source.java',
     patterns: [{ include: 'source.java' }]
 };
