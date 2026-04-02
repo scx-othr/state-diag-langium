@@ -295,8 +295,6 @@ function buildConcreteState(ctx: GenerationContext, state: any): string {
             let guardExpr = 'true';
             if (t.guard?.condition) {
                 guardExpr = getExpression(t.guard.condition);
-            } else if (t.action?.guard?.condition) {
-                guardExpr = getExpression(t.action.guard.condition);
             }
 
             if (i === 0) {

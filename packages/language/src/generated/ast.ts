@@ -61,7 +61,6 @@ export interface Action extends langium.AstNode {
     readonly $type: 'Action';
     content?: string;
     description?: string;
-    guard?: Guard;
     target?: string;
 }
 
@@ -69,7 +68,6 @@ export const Action = {
     $type: 'Action',
     content: 'content',
     description: 'description',
-    guard: 'guard',
     target: 'target'
 } as const;
 
@@ -153,7 +151,7 @@ export function isFloatExpression(item: unknown): item is FloatExpression {
 }
 
 export interface Guard extends langium.AstNode {
-    readonly $container: Action | Transition;
+    readonly $container: Transition;
     readonly $type: 'Guard';
     condition: Expression;
 }
@@ -373,9 +371,6 @@ export class StatelangAstReflection extends langium.AbstractAstReflection {
                 },
                 description: {
                     name: Action.description
-                },
-                guard: {
-                    name: Action.guard
                 },
                 target: {
                     name: Action.target

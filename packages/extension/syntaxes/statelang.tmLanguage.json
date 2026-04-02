@@ -5,10 +5,18 @@
     "sdl"
   ],
   "patterns": [
-    { "include": "#embedded-java" },
-    { "include": "#comments" },
-    { "include": "#state-declarations" },
-    { "include": "#state-references" },
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#embedded-java"
+    },
+    {
+      "include": "#state-declarations"
+    },
+    {
+      "include": "#state-references"
+    },
     {
       "name": "keyword.control.statelang",
       "match": "\\b(entry|exit|final|impl|initial|on|spec|state|statemachine|var)\\b"
@@ -17,65 +25,48 @@
       "name": "string.quoted.double.statelang",
       "begin": "\"",
       "end": "\"",
-      "patterns": [{ "include": "#string-character-escape" }]
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
     },
     {
       "name": "string.quoted.single.statelang",
       "begin": "'",
       "end": "'",
-      "patterns": [{ "include": "#string-character-escape" }]
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
     }
   ],
   "repository": {
-    "embedded-java": {
-      "name": "meta.embedded.block.java.statelang",
-      "begin": "\\bimpl\\s+\\bjava\\b\\s*<<",
-      "beginCaptures": { "0": { "name": "keyword.control.statelang" } },
-      "end": ">>",
-      "endCaptures": { "0": { "name": "punctuation.definition.tag.statelang" } },
-      "contentName": "source.java",
-      "patterns": [{ "include": "source.java" }]
-    },
-    "state-declarations": {
-      "patterns": [
-        {
-          "match": "(?<=\\binitial\\s{1,20})([_a-zA-Z][\\w_]*)",
-          "captures": { "1": { "name": "entity.name.type.state.initial.statelang" } }
-        },
-        {
-          "match": "(?<=\\bfinal\\s{1,20}state\\s{1,20})([_a-zA-Z][\\w_]*)",
-          "captures": { "1": { "name": "entity.name.type.state.final.statelang" } }
-        },
-        {
-          "match": "(?<=\\bstate\\s{1,20})([_a-zA-Z][\\w_]*)",
-          "captures": { "1": { "name": "entity.name.type.state.statelang" } }
-        }
-      ]
-    },
-    "state-references": {
-      "patterns": [
-        {
-          "match": "([_a-zA-Z][\\w_]*)(?=\\s*->)",
-          "captures": { "1": { "name": "entity.name.type.state.reference.statelang" } }
-        },
-        {
-          "match": "(?<=->)\\s*([_a-zA-Z][\\w_]*)",
-          "captures": { "1": { "name": "entity.name.type.state.reference.statelang" } }
-        }
-      ]
-    },
     "comments": {
       "patterns": [
         {
           "name": "comment.block.statelang",
           "begin": "/\\*",
-          "beginCaptures": { "0": { "name": "punctuation.definition.comment.statelang" } },
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.statelang"
+            }
+          },
           "end": "\\*/",
-          "endCaptures": { "0": { "name": "punctuation.definition.comment.statelang" } }
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.statelang"
+            }
+          }
         },
         {
           "begin": "//",
-          "beginCaptures": { "1": { "name": "punctuation.whitespace.comment.leading.statelang" } },
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.statelang"
+            }
+          },
           "end": "(?=$)",
           "name": "comment.line.statelang"
         }
@@ -84,6 +75,75 @@
     "string-character-escape": {
       "name": "constant.character.escape.statelang",
       "match": "\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|u\\{[0-9A-Fa-f]+\\}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
+    },
+    "embedded-java": {
+      "name": "meta.embedded.block.java.statelang",
+      "begin": "\\bimpl\\s+\\bjava\\b\\s*<<",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.control.statelang"
+        }
+      },
+      "end": ">>",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag.statelang"
+        }
+      },
+      "contentName": "source.java",
+      "patterns": [
+        {
+          "include": "source.java"
+        }
+      ]
+    },
+    "state-declarations": {
+      "patterns": [
+        {
+          "match": "(?<=\\binitial\\s{1,20})([_a-zA-Z][\\w_]*)",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.state.initial.statelang"
+            }
+          }
+        },
+        {
+          "match": "(?<=\\bfinal\\s{1,20}state\\s{1,20})([_a-zA-Z][\\w_]*)",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.state.final.statelang"
+            }
+          }
+        },
+        {
+          "match": "(?<=\\bstate\\s{1,20})([_a-zA-Z][\\w_]*)",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.state.statelang"
+            }
+          }
+        }
+      ]
+    },
+    "state-references": {
+      "patterns": [
+        {
+          "match": "([_a-zA-Z][\\w_]*)(?=\\s*->)",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.state.reference.statelang"
+            }
+          }
+        },
+        {
+          "match": "(?<=->)\\s*([_a-zA-Z][\\w_]*)",
+          "captures": {
+            "1": {
+              "name": "entity.name.type.state.reference.statelang"
+            }
+          }
+        }
+      ]
     }
   }
 }

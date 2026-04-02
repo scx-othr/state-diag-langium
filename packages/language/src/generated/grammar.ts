@@ -1137,19 +1137,6 @@ export const StatelangGrammar = (): Grammar => loadedStatelangGrammar ?? (loaded
               }
             ],
             "cardinality": "?"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "guard",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@17"
-              },
-              "arguments": []
-            },
-            "cardinality": "?"
           }
         ]
       },

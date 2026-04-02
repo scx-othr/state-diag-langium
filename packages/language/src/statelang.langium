@@ -92,7 +92,7 @@ Action:
     '/'
     ('spec' description=STRING)?
     ('impl' target=ID content=IMPL_BODY)?
-    (guard=Guard)?
+    //(guard=Guard)?
 ;
 
 Guard:
