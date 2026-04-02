@@ -7,7 +7,7 @@ import * as https from 'node:https';
 import { LanguageClient, TransportKind } from 'vscode-languageclient/node.js';
 import { URI } from 'langium';
 import { NodeFileSystem } from 'langium/node';
-import { createStatelangServices, generatePlantUML } from 'statelang-language';
+import { createStatelangServices, generatePlantUML, generateCode } from 'statelang-language';
 import type { Model } from 'statelang-language';
 
 let client: LanguageClient;
@@ -116,6 +116,26 @@ async function parseSDL(filePath: string): Promise<Model> {
 // This function is called when the extension is activated.
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
     client = await startLanguageClient(context);
+
+    // Command: Generate Java Code (triggered from Explorer context menu)
+    context.subscriptions.push(
+        vscode.commands.registerCommand('statelang.generateJava', async (uri: vscode.Uri) => {
+            // uri comes from Explorer right-click; fall back to active editor
+            const filePath = uri?.fsPath ?? vscode.window.activeTextEditor?.document.uri.fsPath;
+            if (!filePath || !filePath.endsWith('.sdl')) {
+                vscode.window.showWarningMessage('Please invoke this command on a .sdl file.');
+                return;
+            }
+            try {
+                const model = await parseSDL(filePath);
+                const destination = path.join(path.dirname(filePath), 'src', 'gen');
+                generateCode(model, filePath, destination);
+                vscode.window.showInformationMessage(`Java code generated in ${destination}`);
+            } catch (err) {
+                vscode.window.showErrorMessage(`Java code generation failed: ${err}`);
+            }
+        })
+    );
 
     // Command: Show PlantUML Preview (triggered by editor title button)
     context.subscriptions.push(

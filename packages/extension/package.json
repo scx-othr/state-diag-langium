@@ -21,24 +21,72 @@
         "grammars": [{
             "language": "statelang",
             "scopeName": "source.statelang",
-            "path": "syntaxes/statelang.tmLanguage.json"
+            "path": "syntaxes/statelang.tmLanguage.json",
+            "embeddedLanguages": {
+                "source.java": "java"
+            }
         }],
-        "commands": [{
-            "command": "statelang.showPlantUML",
-            "title": "Show PlantUML Preview",
-            "icon": "$(preview)",
-            "category": "StateLang"
-        }],
+        "commands": [
+            {
+                "command": "statelang.showPlantUML",
+                "title": "Show PlantUML Preview",
+                "icon": "$(preview)",
+                "category": "StateLang"
+            },
+            {
+                "command": "statelang.generateJava",
+                "title": "Generate Java Code",
+                "category": "StateLang"
+            }
+        ],
         "menus": {
             "editor/title": [{
                 "command": "statelang.showPlantUML",
                 "when": "resourceLangId == statelang",
                 "group": "navigation"
+            }],
+            "explorer/context": [{
+                "command": "statelang.generateJava",
+                "when": "resourceExtname == .sdl",
+                "group": "statelang@1"
             }]
+        },
+        "configurationDefaults": {
+            "editor.tokenColorCustomizations": {
+                "textMateRules": [
+                    {
+                        "scope": "entity.name.type.state.initial.statelang",
+                        "settings": {
+                            "foreground": "#4EC9B0",
+                            "fontStyle": "bold"
+                        }
+                    },
+                    {
+                        "scope": "entity.name.type.state.final.statelang",
+                        "settings": {
+                            "foreground": "#4CAF82",
+                            "fontStyle": "bold"
+                        }
+                    },
+                    {
+                        "scope": "entity.name.type.state.statelang",
+                        "settings": {
+                            "foreground": "#9CDCFE"
+                        }
+                    },
+                    {
+                        "scope": "entity.name.type.state.reference.statelang",
+                        "settings": {
+                            "foreground": "#DCDCAA"
+                        }
+                    }
+                ]
+            }
         }
     },
     "activationEvents": [
-        "onLanguage:statelang"
+        "onLanguage:statelang",
+        "onCommand:statelang.generateJava"
     ],
     "main": "./out/extension/main.cjs",
     "scripts": {

@@ -29,14 +29,18 @@ function generateStatemachinePuml(stm: Statemachine): string {
 
     // States (with optional entry/exit annotations)
     for (const state of stm.states) {
+        if (state.final) {
+            lines.push(`state ${state.name} <<end>>`);
+            continue;
+        }
         const hasAnnotations = state.entryAction || state.exitAction;
         if (hasAnnotations) {
             lines.push(`state ${state.name} {`);
             if (state.entryAction) {
-                lines.push(`  ${state.name} : entry`);
+                lines.push(`  ${state.name} : entry /`);
             }
             if (state.exitAction) {
-                lines.push(`  ${state.name} : exit`);
+                lines.push(`  ${state.name} : exit /`);
             }
             lines.push('}');
         } else {
