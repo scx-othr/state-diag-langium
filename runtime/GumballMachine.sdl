@@ -23,7 +23,7 @@ statemachine GumballMachine {
         impl java << System.out.println("Turning crank...");>>
 
     SoldOut -> NoQuarter on refill(int amount) / 
-        spec "add the amount of the balls variable and print a message that the Machine has been refilled to $n Gumballs"
+        spec "add the amount of the balls variable and print a message that the machine has been refilled to the indicated amount of gumballs"
 
     Sold -> NoQuarter on dispense / 
         impl java << context.decrementBalls();

@@ -1,3 +1,5 @@
+import javax.swing.plaf.nimbus.State;
+
 public class SoldOut extends State {
 
     public SoldOut(GumballMachine context) {
@@ -17,15 +19,15 @@ System.out.println("Machine is being refilled...");
 // generated end
     }
 
-    /** @prompt add the amount of the balls variable and print a message that the Machine has been refilled to $n Gumballs */
+    /** @prompt add the amount of the balls variable and print a message that the machine has been refilled to the indicated amount of gumballs */
     @Override
     public void refill(int amount) {
         if (true) {
-         // generated start
-context.setBalls(context.getBalls() + amount);
-System.out.println("Machine has been refilled to " + context.getBalls() + " Gumballs");
-// generated end
             this.onExit();
+            // generated start
+            context.setBalls(context.getBalls() + amount);
+            System.out.println("Machine has been refilled to " + context.getBalls() + " Gumballs");
+            // generated end
             context.setState(new NoQuarter(context));
             context.getState().onEntry();
         }

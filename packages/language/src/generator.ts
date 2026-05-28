@@ -291,26 +291,31 @@ function buildConcreteState(ctx: GenerationContext, state: any): string {
         code += `    public void ${triggerName}(${Params(sig)}) {\n`;
 
         transitions.forEach((t, i) => {
-            // Guard bestimmen
+            // determine guard
             let guardExpr = 'true';
             if (t.guard?.condition) {
                 guardExpr = getExpression(t.guard.condition);
             }
 
+            // (1) guard
             if (i === 0) {
                 code += `        if (${guardExpr}) {\n`;
             } else {
                 code += `        else if (${guardExpr}) {\n`;
             }
 
+            // (2) exit
+            code += '            this.onExit();\n';
+
+            // (3) action
             if (t.action) {
                 code += generateBody(t.action);
             }
 
-            // State-Übergang
+            // (4) transition
+            // (5) entry
             const targetName = t.target.ref?.name;
             code +=
-                `            this.onExit();\n` +
                 `            context.setState(new ${capitalize(targetName)}(context));\n` +
                 `            context.getState().onEntry();\n` +
                 `        }\n`;

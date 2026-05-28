@@ -1,3 +1,5 @@
+import javax.swing.plaf.nimbus.State;
+
 public class NoQuarter extends State {
 
     public NoQuarter(GumballMachine context) {
@@ -13,9 +15,9 @@ public class NoQuarter extends State {
     @Override
     public void insertQuarter() {
         if (true) {
-         // generated start
-        // generated end
             this.onExit();
+            // generated start
+            // generated end
             context.setState(new HasQuarter(context));
             context.getState().onEntry();
         }

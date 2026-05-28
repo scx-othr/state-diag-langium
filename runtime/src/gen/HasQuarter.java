@@ -1,3 +1,5 @@
+import javax.swing.plaf.nimbus.State;
+
 public class HasQuarter extends State {
 
     public HasQuarter(GumballMachine context) {
@@ -7,8 +9,8 @@ public class HasQuarter extends State {
     @Override
     public void eject() {
         if (true) {
-         System.out.println("Returning coin..."); 
             this.onExit();
+            System.out.println("Returning coin..."); 
             context.setState(new NoQuarter(context));
             context.getState().onEntry();
         }
@@ -16,8 +18,8 @@ public class HasQuarter extends State {
     @Override
     public void turnCrank() {
         if (true) {
-         System.out.println("Turning crank...");
             this.onExit();
+            System.out.println("Turning crank...");
             context.setState(new Sold(context));
             context.getState().onEntry();
         }

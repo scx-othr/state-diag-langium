@@ -7,7 +7,7 @@ public class Final extends State {
     @Override
     public void onEntry() {
         System.out.println("System is shutting down ....");
-         context.setState(null);
+        context.setState(null);
     }
 
 }

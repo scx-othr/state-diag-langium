@@ -1,3 +1,5 @@
+import javax.swing.plaf.nimbus.State;
+
 public class Sold extends State {
 
     public Sold(GumballMachine context) {
@@ -7,16 +9,16 @@ public class Sold extends State {
     @Override
     public void dispense() {
         if ((context.getBalls() > 1)) {
-         context.decrementBalls();
-                System.out.println("dispensing ball");
             this.onExit();
+            context.decrementBalls();
+            System.out.println("dispensing ball");
             context.setState(new NoQuarter(context));
             context.getState().onEntry();
         }
         else if ((context.getBalls() == 1)) {
-         context.decrementBalls(); 
-                System.out.println("machine is empty!");
             this.onExit();
+            context.decrementBalls(); 
+            System.out.println("machine is empty!");
             context.setState(new SoldOut(context));
             context.getState().onEntry();
         }
