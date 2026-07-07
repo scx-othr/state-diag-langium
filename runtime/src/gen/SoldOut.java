@@ -1,5 +1,3 @@
-import javax.swing.plaf.nimbus.State;
-
 public class SoldOut extends State {
 
     public SoldOut(GumballMachine context) {
@@ -25,9 +23,9 @@ System.out.println("Machine is being refilled...");
         if (true) {
             this.onExit();
             // generated start
-            context.setBalls(context.getBalls() + amount);
-            System.out.println("Machine has been refilled to " + context.getBalls() + " Gumballs");
-            // generated end
+context.setBalls(context.getBalls() + amount);
+System.out.println("Machine has been refilled to " + context.getBalls() + " Gumballs");
+// generated end
             context.setState(new NoQuarter(context));
             context.getState().onEntry();
         }

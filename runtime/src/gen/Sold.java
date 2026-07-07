@@ -1,5 +1,3 @@
-import javax.swing.plaf.nimbus.State;
-
 public class Sold extends State {
 
     public Sold(GumballMachine context) {

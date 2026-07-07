@@ -1,5 +1,3 @@
-import javax.swing.plaf.nimbus.State;
-
 public class HasQuarter extends State {
 
     public HasQuarter(GumballMachine context) {
